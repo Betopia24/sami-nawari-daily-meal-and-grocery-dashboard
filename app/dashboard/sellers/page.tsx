@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useDebounce } from "use-debounce";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
+import { CommonPagination } from "@/components/common/CommonPagination";
 import { PageHeader } from "@/components/common/PageHeader";
 
 import { Seller } from "./types";
@@ -97,51 +97,11 @@ export default function SellersPage() {
         onActivateSeller={setSellerToActivate}
       />
 
-      {totalPages > 0 && (
-        <div className="flex items-center justify-end mt-2">
-          <Pagination className="justify-end w-auto mx-0">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious 
-                  href="#" 
-                  className={`border-border text-muted-foreground hover:bg-muted transition-colors duration-300 ${currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (currentPage > 1) setCurrentPage(currentPage - 1);
-                  }}
-                />
-              </PaginationItem>
-              
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <PaginationItem key={page}>
-                  <PaginationLink 
-                    href="#" 
-                    isActive={currentPage === page} 
-                    className={currentPage === page ? "bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-300" : "border-border text-foreground hover:bg-muted cursor-pointer transition-colors duration-300"}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setCurrentPage(page);
-                    }}
-                  >
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-
-              <PaginationItem>
-                <PaginationNext 
-                  href="#" 
-                  className={`border-border text-muted-foreground hover:bg-muted transition-colors duration-300 ${currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-                  }}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
-      )}
+      <CommonPagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        onPageChange={setCurrentPage} 
+      />
 
       <SellerDetailsSheet 
         seller={selectedSeller} 
