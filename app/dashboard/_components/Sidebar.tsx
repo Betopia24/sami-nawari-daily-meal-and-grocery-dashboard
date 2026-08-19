@@ -24,7 +24,7 @@ interface NavItemButtonProps {
 
 const NavItemButton = memo(function NavItemButton({ item, currentRole, isActive, onNavigate }: NavItemButtonProps) {
   const IconToUse = item.icons[currentRole] || item.defaultIcon;
-  
+
   return (
     <Button
       variant={isActive ? "default" : "ghost"}
@@ -36,7 +36,7 @@ const NavItemButton = memo(function NavItemButton({ item, currentRole, isActive,
       nativeButton={false}
       onClick={onNavigate}
     >
-      <IconToUse className="mr-4 h-6 w-6" />
+      <IconToUse className="mr-4 size-5.5" />
       {item.title}
     </Button>
   );
@@ -67,24 +67,24 @@ export const Sidebar = memo(function Sidebar({ currentRole, className, onNavigat
               <NavItemButton
                 key={item.href}
                 item={item}
-                  currentRole={currentRole}
-                  isActive={isActive}
-                  onNavigate={onNavigate}
-                />
-              );
-            })}
-          </div>
+                currentRole={currentRole}
+                isActive={isActive}
+                onNavigate={onNavigate}
+              />
+            );
+          })}
         </div>
-        <div className="p-4 mt-auto">
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-[15px] font-semibold h-12 px-5 rounded-lg text-[#E7000B] hover:text-[#E7000B] hover:bg-red-50/50"
-            nativeButton={false}
-          >
-            <LogoutIcon className="mr-4 h-5 w-5" />
-            Log Out
-          </Button>
-        </div>
+      </div>
+      <div className="p-4 mt-auto">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-[15px] font-semibold h-12 px-5 rounded-lg text-[#E7000B] hover:text-[#E7000B] hover:bg-red-50/50"
+          nativeButton={false}
+        >
+          <LogoutIcon className="mr-4 size-5" />
+          Log Out
+        </Button>
+      </div>
     </div>
   );
 });
