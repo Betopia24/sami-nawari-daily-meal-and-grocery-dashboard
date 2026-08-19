@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ContentItem } from "../types";
-import { Edit3 } from "lucide-react";
+import { EditIcon } from "@/components/icons";
 
 interface ContentEditSheetProps {
   itemToEdit: ContentItem | null;
@@ -48,7 +48,7 @@ export function ContentEditSheet({
         <SheetHeader className="p-6 border-b border-border bg-muted/20">
           <SheetTitle className="text-lg font-bold flex items-center gap-3">
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary">
-              <Edit3 className="w-5 h-5" />
+              <EditIcon className="w-5 h-5" />
             </div>
             Edit Content
           </SheetTitle>
