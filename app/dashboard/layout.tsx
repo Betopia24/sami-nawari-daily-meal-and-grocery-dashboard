@@ -23,7 +23,7 @@ export default async function DashboardLayout({
       </div>
       <div className="flex flex-col">
         <Header currentRole={currentRole} />
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex flex-1 flex-col gap-4 lg:gap-6 p-6">
           {children}
         </main>
       </div>
