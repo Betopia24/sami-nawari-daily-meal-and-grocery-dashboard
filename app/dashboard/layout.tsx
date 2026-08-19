@@ -17,13 +17,13 @@ export default async function DashboardLayout({
   const currentRole = session.role;
 
   return (
-    <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] bg-background">
-      <div className="hidden border-r bg-muted/40 md:block">
+    <div className="grid h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr] bg-background overflow-hidden">
+      <div className="hidden bg-muted/40 md:block h-full overflow-hidden">
         <Sidebar currentRole={currentRole} />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col h-full overflow-hidden">
         <Header currentRole={currentRole} />
-        <main className="flex flex-1 flex-col gap-4 lg:gap-6 p-6">
+        <main className="flex flex-1 flex-col gap-4 lg:gap-6 p-6 overflow-y-auto">
           {children}
         </main>
       </div>

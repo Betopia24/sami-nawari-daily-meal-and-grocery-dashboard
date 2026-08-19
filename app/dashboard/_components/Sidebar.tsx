@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import { LogoutIcon } from "@/components/icons";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,13 +27,16 @@ const NavItemButton = memo(function NavItemButton({ item, currentRole, isActive,
   
   return (
     <Button
-      variant={isActive ? "secondary" : "ghost"}
-      className="w-full justify-start text-xs font-medium"
+      variant={isActive ? "default" : "ghost"}
+      className={cn(
+        "w-full justify-start text-[15px] font-semibold h-12 px-5 rounded-lg",
+        !isActive && "text-foreground hover:bg-muted/50"
+      )}
       render={<Link href={item.href} />}
       nativeButton={false}
       onClick={onNavigate}
     >
-      <IconToUse className="mr-2 h-4 w-4" />
+      <IconToUse className="mr-4 h-6 w-6" />
       {item.title}
     </Button>
   );
@@ -45,20 +50,23 @@ export const Sidebar = memo(function Sidebar({ currentRole, className, onNavigat
   }, [currentRole]);
 
   return (
-    <div className={cn("pb-12 h-full border-r bg-card text-card-foreground", className)}>
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-xs font-semibold tracking-tight text-muted-foreground uppercase">
-            Overview
-          </h2>
-          <div className="space-y-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
+    <div className={cn("h-full bg-card text-card-foreground flex flex-col", className)}>
+      <div className="flex items-center gap-3 px-6 py-6 mb-2">
+        <Image src="/dashboard-logo.png" alt="Logo" width={40} height={40} className="rounded-lg object-contain" />
+        <div className="flex flex-col">
+          <span className="font-bold text-foreground text-[17px] leading-tight">Daily Meal</span>
+          <span className="text-[11px] text-muted-foreground font-medium mt-0.5">Admin Panel</span>
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        <div className="px-4 space-y-2">
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
 
-              return (
-                <NavItemButton
-                  key={item.href}
-                  item={item}
+            return (
+              <NavItemButton
+                key={item.href}
+                item={item}
                   currentRole={currentRole}
                   isActive={isActive}
                   onNavigate={onNavigate}
@@ -67,7 +75,16 @@ export const Sidebar = memo(function Sidebar({ currentRole, className, onNavigat
             })}
           </div>
         </div>
-      </div>
+        <div className="p-4 mt-auto">
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-[15px] font-semibold h-12 px-5 rounded-lg text-[#E7000B] hover:text-[#E7000B] hover:bg-red-50/50"
+            nativeButton={false}
+          >
+            <LogoutIcon className="mr-4 h-5 w-5" />
+            Log Out
+          </Button>
+        </div>
     </div>
   );
 });

@@ -6,9 +6,8 @@ import {
   Bar,
   XAxis,
   ResponsiveContainer,
-  LineChart,
-  Line,
-  CartesianGrid,
+  AreaChart,
+  Area,
   Tooltip
 } from "recharts";
 
@@ -38,7 +37,7 @@ export function DashboardCharts() {
       {/* User Growth */}
       <Card className="rounded-xl border-border shadow-sm">
         <CardHeader className="pb-2 pt-4 px-4">
-          <CardTitle className="text-sm font-bold text-foreground">User Growth — Last 7 Days</CardTitle>
+          <CardTitle className="text-[20px] font-bold text-foreground">User Growth — Last 7 Days</CardTitle>
         </CardHeader>
         <CardContent className="px-4 pb-4">
           <div className="h-[250px] w-full mt-4">
@@ -56,7 +55,7 @@ export function DashboardCharts() {
                   cursor={{fill: 'transparent'}}
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 />
-                <Bar dataKey="total" fill="var(--primary)" radius={[4, 4, 4, 4]} label={{ position: 'top', fill: 'var(--primary)', fontSize: 14, fontWeight: 'bold' }} />
+                <Bar dataKey="total" fill="#3A8F5C" radius={[4, 4, 4, 4]} label={{ position: 'top', offset: 12, fill: '#3A8F5C', fontSize: 14, fontWeight: 'bold' }} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -66,13 +65,12 @@ export function DashboardCharts() {
       {/* Orders This Week */}
       <Card className="rounded-xl border-border shadow-sm">
         <CardHeader className="pb-2 pt-4 px-4">
-          <CardTitle className="text-sm font-bold text-foreground">Orders This Week</CardTitle>
+          <CardTitle className="text-[20px] font-bold text-foreground">Orders This Week</CardTitle>
         </CardHeader>
         <CardContent className="px-4 pb-4">
           <div className="h-[250px] w-full mt-4">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={lineChartData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+              <AreaChart data={lineChartData} margin={{ top: 20, right: 10, left: 10, bottom: 0 }}>
                 <XAxis 
                   dataKey="name" 
                   stroke="#888888" 
@@ -84,16 +82,18 @@ export function DashboardCharts() {
                 <Tooltip 
                   contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                 />
-                <Line 
+                <Area 
                   type="linear" 
                   dataKey="total" 
-                  stroke="var(--primary)" 
+                  stroke="#3A8F5C" 
+                  fill="rgba(58, 143, 92, 0.15)"
+                  fillOpacity={1}
                   strokeWidth={3} 
-                  activeDot={{ r: 6, fill: "var(--primary)" }} 
-                  dot={{ r: 4, fill: "var(--primary)", strokeWidth: 2, stroke: "#fff" }} 
-                  label={{ position: 'top', fill: 'var(--primary)', fontSize: 14, fontWeight: 'bold' }}
+                  activeDot={{ r: 6, fill: "#3A8F5C", stroke: "#3A8F5C", strokeWidth: 2 }} 
+                  dot={{ r: 5, fill: "#3A8F5C", stroke: "#3A8F5C", strokeWidth: 2 }} 
+                  label={{ position: 'top', offset: 12, fill: '#3A8F5C', fontSize: 14, fontWeight: 'bold' }}
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </CardContent>

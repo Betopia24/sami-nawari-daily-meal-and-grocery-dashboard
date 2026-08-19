@@ -20,9 +20,9 @@ export function RecentActivity() {
         <Table>
           <TableHeader className="bg-gray-50/50">
             <TableRow className="hover:bg-transparent border-border">
-              <TableHead className="w-[50%] text-xs font-semibold text-muted-foreground uppercase tracking-wider h-10 px-6">Activity</TableHead>
-              <TableHead className="w-[30%] text-xs font-semibold text-muted-foreground uppercase tracking-wider h-10 px-6">Type</TableHead>
-              <TableHead className="text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider h-10 px-6">Time</TableHead>
+              <TableHead className="w-[50%] px-6 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Activity</TableHead>
+              <TableHead className="w-[30%] px-6 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Type</TableHead>
+              <TableHead className="px-6 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Time</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -1,17 +1,16 @@
 import {
-  LayoutDashboard,
-  Users,
-  Briefcase,
-  FileText,
-  Settings,
-  UserCircle,
-  Shield,
-  BarChart,
-  Target,
-  UsersRound,
-  ClipboardList,
-  type LucideIcon
-} from "lucide-react";
+  Icon1,
+  Icon2,
+  Icon3,
+  Icon4,
+  Icon5,
+  Icon6,
+  Icon7,
+  Icon8,
+  Icon9
+} from "@/components/icons";
+import { type LucideIcon } from "lucide-react";
+import { SVGProps } from "react";
 
 export type Role = "admin" | "manager" | "user";
 
@@ -19,64 +18,72 @@ export interface NavItem {
   title: string;
   href: string; // Absolute path, e.g., "/dashboard/..."
   roles: Role[];
-  icons: Partial<Record<Role, LucideIcon>>;
-  defaultIcon: LucideIcon;
+  icons: Partial<Record<Role, React.ComponentType<SVGProps<SVGSVGElement>>>>;
+  defaultIcon: React.ComponentType<SVGProps<SVGSVGElement>>;
 }
 
 export const navigationConfig: NavItem[] = [
   {
-    title: "Dashboard",
+    title: "Overview",
     href: "/dashboard",
     roles: ["admin", "manager", "user"],
-    defaultIcon: LayoutDashboard,
-    icons: {
-      admin: Shield,
-      manager: Target, // Distinct icon for manager
-      user: UserCircle
-    }
+    defaultIcon: Icon1,
+    icons: {}
   },
   {
     title: "Users",
     href: "/dashboard/users",
-    roles: ["admin"], // Removed manager from general users, they get "Team" instead
-    defaultIcon: Users,
+    roles: ["admin", "manager"],
+    defaultIcon: Icon2,
     icons: {}
   },
   {
-    title: "Team",
-    href: "/dashboard/team",
-    roles: ["manager"], // Manager only route
-    defaultIcon: UsersRound,
+    title: "Sellers",
+    href: "/dashboard/sellers",
+    roles: ["admin", "manager"],
+    defaultIcon: Icon3,
     icons: {}
   },
   {
-    title: "Projects",
-    href: "/dashboard/projects",
-    roles: ["admin", "manager", "user"],
-    defaultIcon: Briefcase,
-    icons: {
-      manager: ClipboardList // Distinct icon for manager
-    }
-  },
-  {
-    title: "Analytics",
-    href: "/dashboard/analytics",
-    roles: ["manager"], // Manager only route
-    defaultIcon: BarChart,
+    title: "Applications",
+    href: "/dashboard/applications",
+    roles: ["admin", "manager"],
+    defaultIcon: Icon4,
     icons: {}
   },
   {
-    title: "Reports",
-    href: "/dashboard/reports",
-    roles: ["admin"], // Removed manager, they get Analytics instead
-    defaultIcon: FileText,
+    title: "Food Listings",
+    href: "/dashboard/food-listings",
+    roles: ["admin", "manager"],
+    defaultIcon: Icon5,
+    icons: {}
+  },
+  {
+    title: "Orders",
+    href: "/dashboard/orders",
+    roles: ["admin", "manager"],
+    defaultIcon: Icon6,
+    icons: {}
+  },
+  {
+    title: "Payments",
+    href: "/dashboard/payments",
+    roles: ["admin", "manager"],
+    defaultIcon: Icon7,
+    icons: {}
+  },
+  {
+    title: "Content",
+    href: "/dashboard/content",
+    roles: ["admin", "manager"],
+    defaultIcon: Icon8,
     icons: {}
   },
   {
     title: "Settings",
     href: "/dashboard/settings",
-    roles: ["admin"],
-    defaultIcon: Settings,
+    roles: ["admin", "manager"],
+    defaultIcon: Icon9,
     icons: {}
   }
 ];
