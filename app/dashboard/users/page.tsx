@@ -83,7 +83,7 @@ export default function UsersPage() {
               <TabsTrigger 
                 key={tab} 
                 value={tab}
-                className="rounded-full cursor-pointer px-5 py-2 bg-card border border-border shadow-sm text-sm font-semibold transition-colors data-active:bg-primary data-active:text-primary-foreground data-active:border-primary"
+                className="rounded-full cursor-pointer px-5 py-2 bg-card border border-border shadow-sm text-sm font-semibold transition-all duration-300 ease-out hover:bg-muted data-active:bg-primary data-active:text-primary-foreground data-active:border-primary"
               >
                 {tab}
               </TabsTrigger>
