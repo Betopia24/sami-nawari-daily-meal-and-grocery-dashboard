@@ -16,7 +16,7 @@ export function MetricCard({ title, value, trendText, showTrendIcon, hasAlert }:
       <CardHeader className="flex flex-row items-center justify-between pb-2 pt-4 px-4 space-y-0">
         <CardTitle className="text-xs font-medium text-muted-foreground">{title}</CardTitle>
         {hasAlert && (
-          <Badge variant="destructive" className="bg-red-100 text-red-600 hover:bg-red-100 border-none rounded-full px-2 py-0 text-[10px] absolute top-4 right-4">
+          <Badge variant="secondary" className="bg-[#ffe5e5] text-[#3A8F5C] hover:bg-[#ffe5e5] border-none rounded-full px-2 py-0 text-[10px] font-bold">
             Alert
           </Badge>
         )}
