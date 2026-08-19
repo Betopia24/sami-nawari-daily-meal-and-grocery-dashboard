@@ -45,7 +45,7 @@ export function SellerTable({ sellers, onViewSeller, onSuspendSeller, onActivate
               </TableCell>
               <TableCell className="px-6 py-4 text-muted-foreground text-[13px]">{seller.ownerName}</TableCell>
               <TableCell className="px-6 py-4">
-                <Badge variant="secondary" className={`rounded-full px-2.5 py-0.5 border-none text-[11px] font-bold ${getStatusBadgeStyles(seller.status)}`}>
+                <Badge variant="secondary" className={`rounded-full px-4 py-3 border-none text-[11px] font-bold ${getStatusBadgeStyles(seller.status)}`}>
                   {seller.status}
                 </Badge>
               </TableCell>

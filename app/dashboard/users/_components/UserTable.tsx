@@ -66,14 +66,14 @@ export function UserTable({ users, onViewUser, onSuspendUser, onActivateUser }: 
               </TableCell>
               <TableCell className="px-6 py-4 text-muted-foreground text-[13px]">{user.email}</TableCell>
               <TableCell className="px-6 py-4">
-                <Badge variant="secondary" className={`rounded-full px-2.5 py-0.5 border-none text-[11px] font-bold ${getStatusBadgeStyles(user.status)}`}>
+                <Badge variant="secondary" className={`rounded-full px-4 py-3 border-none text-[11px] font-bold ${getStatusBadgeStyles(user.status)}`}>
                   {user.status}
                 </Badge>
               </TableCell>
               <TableCell className="px-6 py-4 text-muted-foreground text-[13px]">{user.joined}</TableCell>
               <TableCell className="px-6 py-4 text-foreground text-sm font-medium">{user.orders}</TableCell>
               <TableCell className="px-6 py-4">
-                <Badge variant="secondary" className={`rounded-full px-2.5 py-0.5 border-none text-[11px] font-bold ${getRoleBadgeStyles(user.role)}`}>
+                <Badge variant="secondary" className={`rounded-full px-4 py-3 border-none text-[11px] font-bold ${getRoleBadgeStyles(user.role)}`}>
                   {user.role}
                 </Badge>
               </TableCell>
