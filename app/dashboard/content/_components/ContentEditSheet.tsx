@@ -44,10 +44,10 @@ export function ContentEditSheet({
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-md overflow-y-auto border-l border-border p-0">
-        <SheetHeader className="p-6 border-b border-border bg-muted/20">
-          <SheetTitle className="text-lg font-bold flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary">
+      <SheetContent className="sm:max-w-md border-l-0 shadow-2xl bg-background/95 backdrop-blur-xl">
+        <SheetHeader className="mb-2">
+          <SheetTitle className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 flex items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary shrink-0">
               <EditIcon className="w-5 h-5" />
             </div>
             Edit Content
@@ -57,7 +57,7 @@ export function ContentEditSheet({
           </SheetDescription>
         </SheetHeader>
 
-        <div className="p-6 space-y-6">
+        <div className="mt-6 flex flex-col gap-6 w-full animate-in fade-in slide-in-from-right-4 duration-500 flex-1">
           <div className="space-y-3">
             <label className="text-[13px] font-bold text-muted-foreground uppercase tracking-wide">
               Title
@@ -70,7 +70,7 @@ export function ContentEditSheet({
           </div>
         </div>
 
-        <SheetFooter className="p-6 border-t border-border mt-auto">
+        <SheetFooter className="mt-auto pt-6 border-t border-border/40 w-full">
           <div className="flex justify-end gap-3 w-full">
             <Button 
               variant="outline" 

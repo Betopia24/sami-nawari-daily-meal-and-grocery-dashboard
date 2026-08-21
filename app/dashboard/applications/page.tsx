@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { PageHeader } from "@/components/common/PageHeader";
+import { CommonPagination } from "@/components/common/CommonPagination";
+import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { ApplicationCard } from "./_components/ApplicationCard";
 import { Application } from "./types";
 
@@ -12,10 +14,21 @@ const mockApplications: Application[] = [
   { id: 4, ownerName: "Raj Patel", kitchenName: "Raj's Spice House", category: "Indian", appliedDate: "Aug 5, 2024", status: "Pending" },
   { id: 5, ownerName: "Fatima Al-Hasan", kitchenName: "Al-Hasan Home Eats", category: "Middle Eastern", appliedDate: "Aug 4, 2024", status: "Pending" },
   { id: 6, ownerName: "Lin Wei", kitchenName: "Wei family Kitchen", category: "Chinese", appliedDate: "Aug 3, 2024", status: "Pending" },
+  { id: 7, ownerName: "Maria Garcia", kitchenName: "Maria's Tacos", category: "Mexican", appliedDate: "Aug 2, 2024", status: "Pending" },
+  { id: 8, ownerName: "John Smith", kitchenName: "Burger Joint", category: "American", appliedDate: "Aug 1, 2024", status: "Pending" },
+  { id: 9, ownerName: "Sushi Master", kitchenName: "Tokyo Sushi", category: "Japanese", appliedDate: "Jul 30, 2024", status: "Pending" },
 ];
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>(mockApplications);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  
+  const totalPages = Math.ceil(applications.length / itemsPerPage);
+  const currentApplications = applications.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handleApprove = (id: number) => {
     // Update the status to Approved instead of removing from UI
@@ -29,13 +42,16 @@ export default function ApplicationsPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <PageHeader 
-        title="Sellers Application" 
-        description="Review & approve new seller request" 
-      />
+      <MotionWrapper delay={0.1}>
+        <PageHeader 
+          title="Sellers Application" 
+          description="Review & approve new seller request" 
+        />
+      </MotionWrapper>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {applications.map(app => (
+      <MotionWrapper delay={0.2}>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {currentApplications.map(app => (
           <ApplicationCard 
             key={app.id} 
             application={app} 
@@ -49,7 +65,18 @@ export default function ApplicationsPage() {
             <p className="text-muted-foreground text-sm">You have reviewed all seller requests.</p>
           </div>
         )}
-      </div>
+        </div>
+      </MotionWrapper>
+
+      {applications.length > 0 && (
+        <MotionWrapper delay={0.3}>
+          <CommonPagination 
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </MotionWrapper>
+      )}
     </div>
   );
 }

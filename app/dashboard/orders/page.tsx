@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/common/PageHeader";
 import { CommonPagination } from "@/components/common/CommonPagination";
+import { MotionWrapper } from "@/components/common/MotionWrapper";
 
 import { Order } from "./types";
 import { OrderTable } from "./_components/OrderTable";
@@ -58,13 +59,16 @@ export default function OrdersPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <PageHeader 
-        title="Orders" 
-        description="Manage & monitor marketplace orders" 
-      />
+      <MotionWrapper delay={0.1}>
+        <PageHeader 
+          title="Orders" 
+          description="Manage & monitor marketplace orders" 
+        />
+      </MotionWrapper>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        <Input 
+      <MotionWrapper delay={0.2}>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <Input 
           placeholder="Search order ID, buyer or seller..." 
           className="w-full sm:max-w-[280px] rounded-xl border-border h-10 px-4"
           value={searchTerm}
@@ -85,17 +89,22 @@ export default function OrdersPage() {
           </TabsList>
         </Tabs>
       </div>
+      </MotionWrapper>
 
-      <OrderTable 
-        orders={paginatedOrders}
-        onViewOrder={handleViewOrder}
-      />
+      <MotionWrapper delay={0.3}>
+        <OrderTable 
+          orders={paginatedOrders}
+          onViewOrder={handleViewOrder}
+        />
+      </MotionWrapper>
 
-      <CommonPagination 
-        currentPage={currentPage} 
-        totalPages={totalPages} 
-        onPageChange={setCurrentPage} 
-      />
+      <MotionWrapper delay={0.4}>
+        <CommonPagination 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          onPageChange={setCurrentPage} 
+        />
+      </MotionWrapper>
 
       <OrderDetailsSheet 
         order={selectedOrder} 

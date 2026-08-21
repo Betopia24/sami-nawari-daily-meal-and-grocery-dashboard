@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CommonPagination } from "@/components/common/CommonPagination";
 import { PageHeader } from "@/components/common/PageHeader";
+import { MotionWrapper } from "@/components/common/MotionWrapper";
 
 import { User } from "./types";
 import { UserTable } from "./_components/UserTable";
@@ -64,13 +65,16 @@ export default function UsersPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <PageHeader 
-        title="Users" 
-        description="Manage registered users" 
-      />
+      <MotionWrapper delay={0.1}>
+        <PageHeader 
+          title="Users" 
+          description="Manage registered users" 
+        />
+      </MotionWrapper>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        <Input 
+      <MotionWrapper delay={0.2}>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <Input 
           placeholder="Search users..." 
           className="w-full sm:max-w-[250px] rounded-xl border-border h-10 px-4"
           value={searchTerm}
@@ -91,19 +95,24 @@ export default function UsersPage() {
           </TabsList>
         </Tabs>
       </div>
+      </MotionWrapper>
 
-      <UserTable 
-        users={paginatedUsers}
-        onViewUser={handleViewUser}
-        onSuspendUser={setUserToSuspend}
-        onActivateUser={setUserToActivate}
-      />
+      <MotionWrapper delay={0.3}>
+        <UserTable 
+          users={paginatedUsers}
+          onViewUser={handleViewUser}
+          onSuspendUser={setUserToSuspend}
+          onActivateUser={setUserToActivate}
+        />
+      </MotionWrapper>
 
-      <CommonPagination 
-        currentPage={currentPage} 
-        totalPages={totalPages} 
-        onPageChange={setCurrentPage} 
-      />
+      <MotionWrapper delay={0.4}>
+        <CommonPagination 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          onPageChange={setCurrentPage} 
+        />
+      </MotionWrapper>
 
       <UserDetailsSheet 
         user={selectedUser} 

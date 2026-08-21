@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CommonPagination } from "@/components/common/CommonPagination";
 import { PageHeader } from "@/components/common/PageHeader";
+import { MotionWrapper } from "@/components/common/MotionWrapper";
 
 import { Seller } from "./types";
 import { SellerTable } from "./_components/SellerTable";
@@ -62,13 +63,16 @@ export default function SellersPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <PageHeader 
-        title="Sellers" 
-        description="Manage verified home kitchen sellers" 
-      />
+      <MotionWrapper delay={0.1}>
+        <PageHeader 
+          title="Sellers" 
+          description="Manage verified home kitchen sellers" 
+        />
+      </MotionWrapper>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        <Input 
+      <MotionWrapper delay={0.2}>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <Input 
           placeholder="Search sellers..." 
           className="w-full sm:max-w-[250px] rounded-xl border-border h-10 px-4"
           value={searchTerm}
@@ -89,19 +93,24 @@ export default function SellersPage() {
           </TabsList>
         </Tabs>
       </div>
+      </MotionWrapper>
 
-      <SellerTable 
-        sellers={paginatedSellers}
-        onViewSeller={handleViewSeller}
-        onSuspendSeller={setSellerToSuspend}
-        onActivateSeller={setSellerToActivate}
-      />
+      <MotionWrapper delay={0.3}>
+        <SellerTable 
+          sellers={paginatedSellers}
+          onViewSeller={handleViewSeller}
+          onSuspendSeller={setSellerToSuspend}
+          onActivateSeller={setSellerToActivate}
+        />
+      </MotionWrapper>
 
-      <CommonPagination 
-        currentPage={currentPage} 
-        totalPages={totalPages} 
-        onPageChange={setCurrentPage} 
-      />
+      <MotionWrapper delay={0.4}>
+        <CommonPagination 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          onPageChange={setCurrentPage} 
+        />
+      </MotionWrapper>
 
       <SellerDetailsSheet 
         seller={selectedSeller} 

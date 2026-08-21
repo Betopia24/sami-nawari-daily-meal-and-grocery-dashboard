@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CommonPagination } from "@/components/common/CommonPagination";
 import { PageHeader } from "@/components/common/PageHeader";
+import { MotionWrapper } from "@/components/common/MotionWrapper";
 
 import { Food } from "./types";
 import { FoodTable } from "./_components/FoodTable";
@@ -62,13 +63,16 @@ export default function FoodsPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <PageHeader 
-        title="Food Listings" 
-        description="Manage all marketplace food items" 
-      />
+      <MotionWrapper delay={0.1}>
+        <PageHeader 
+          title="Food Listings" 
+          description="Manage all marketplace food items" 
+        />
+      </MotionWrapper>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        <Input 
+      <MotionWrapper delay={0.2}>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <Input 
           placeholder="Search food, sellers, category..." 
           className="w-full sm:max-w-[280px] rounded-xl border-border h-10 px-4"
           value={searchTerm}
@@ -89,17 +93,22 @@ export default function FoodsPage() {
           </TabsList>
         </Tabs>
       </div>
+      </MotionWrapper>
 
-      <FoodTable 
-        foods={paginatedFoods}
-        onAction={handleAction}
-      />
+      <MotionWrapper delay={0.3}>
+        <FoodTable 
+          foods={paginatedFoods}
+          onAction={handleAction}
+        />
+      </MotionWrapper>
 
-      <CommonPagination 
-        currentPage={currentPage} 
-        totalPages={totalPages} 
-        onPageChange={setCurrentPage} 
-      />
+      <MotionWrapper delay={0.4}>
+        <CommonPagination 
+          currentPage={currentPage} 
+          totalPages={totalPages} 
+          onPageChange={setCurrentPage} 
+        />
+      </MotionWrapper>
     </div>
   );
 }

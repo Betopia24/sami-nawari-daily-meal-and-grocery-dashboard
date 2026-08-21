@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageHeader } from "@/components/common/PageHeader";
 import { CommonPagination } from "@/components/common/CommonPagination";
+import { MotionWrapper } from "@/components/common/MotionWrapper";
 
 import { ContentItem } from "./types";
 import { ContentTable } from "./_components/ContentTable";
@@ -79,13 +80,16 @@ export default function ContentPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <PageHeader 
-        title="Content" 
-        description="Manage recipes, tips & guides" 
-      />
+      <MotionWrapper delay={0.1}>
+        <PageHeader 
+          title="Content" 
+          description="Manage recipes, tips & guides" 
+        />
+      </MotionWrapper>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full sm:w-auto">
+      <MotionWrapper delay={0.2}>
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full sm:w-auto">
           <TabsList className="bg-transparent gap-3 h-auto p-0 flex-wrap">
             {["Recipes", "Healthy Tips", "Nutrition Guides"].map((tab) => (
               <TabsTrigger 
@@ -98,22 +102,25 @@ export default function ContentPage() {
             ))}
           </TabsList>
         </Tabs>
-      </div>
+        </div>
+      </MotionWrapper>
 
-      <div className="flex flex-col gap-2">
+      <MotionWrapper delay={0.3}>
         <ContentTable 
           content={paginatedContent} 
           onEdit={handleEdit}
           onToggleArchive={handleToggleArchive}
           onDelete={handleDelete}
         />
+      </MotionWrapper>
         
+      <MotionWrapper delay={0.4}>
         <CommonPagination 
           currentPage={currentPage} 
           totalPages={totalPages} 
           onPageChange={setCurrentPage} 
         />
-      </div>
+      </MotionWrapper>
 
       <ContentActionDialogs 
         itemToArchive={itemToArchive}

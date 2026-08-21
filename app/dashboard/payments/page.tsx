@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { CommonPagination } from "@/components/common/CommonPagination";
 import { MetricCard } from "@/app/dashboard/_components/MetricCard";
 import { TransactionTable } from "./_components/TransactionTable";
+import { MotionWrapper } from "@/components/common/MotionWrapper";
 import { Transaction } from "./types";
 
 const mockTransactions: Transaction[] = [
@@ -24,12 +25,15 @@ export default function PaymentsPage() {
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <PageHeader 
-        title="Payments" 
-        description="Revenue & transaction overview" 
-      />
+      <MotionWrapper delay={0.1}>
+        <PageHeader 
+          title="Payments" 
+          description="Revenue & transaction overview" 
+        />
+      </MotionWrapper>
 
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
+      <MotionWrapper delay={0.2}>
+        <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
         <MetricCard 
           title="Total Revenue" 
           value="$18,420" 
@@ -53,16 +57,21 @@ export default function PaymentsPage() {
           title="Refunds" 
           value="$280" 
         />
-      </div>
+        </div>
+      </MotionWrapper>
 
       <div className="mt-4 flex flex-col gap-2">
-        <TransactionTable transactions={paginatedTransactions} />
+        <MotionWrapper delay={0.3}>
+          <TransactionTable transactions={paginatedTransactions} />
+        </MotionWrapper>
         
-        <CommonPagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
-        />
+        <MotionWrapper delay={0.4}>
+          <CommonPagination 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={setCurrentPage} 
+          />
+        </MotionWrapper>
       </div>
     </div>
   );

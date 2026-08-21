@@ -23,8 +23,8 @@ export function ApplicationCard({ application, onApprove, onReject }: Applicatio
   };
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-      <div className="flex justify-between items-start mb-8">
+    <div className="bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div className="flex justify-between items-start mb-5">
         <div className="flex items-center gap-4">
           <Avatar className="h-12 w-12 bg-[#3A8F5C]">
             <AvatarFallback className="bg-[#3A8F5C] text-white text-lg font-semibold">
@@ -36,12 +36,12 @@ export function ApplicationCard({ application, onApprove, onReject }: Applicatio
             <p className="text-muted-foreground text-[13px] mt-0.5">{application.kitchenName}</p>
           </div>
         </div>
-        <Badge variant="secondary" className={`rounded-full px-4 py-3 font-bold border-none text-[12px] ${getStatusBadgeStyles(application.status)}`}>
+        <Badge variant="secondary" className={`rounded-full px-3 py-1.5 font-bold border-none text-[12px] ${getStatusBadgeStyles(application.status)}`}>
           {application.status}
         </Badge>
       </div>
 
-      <div className="flex flex-col gap-4 mb-8">
+      <div className="flex flex-col gap-3 mb-5">
         <div className="flex justify-between items-center text-[13px]">
           <span className="text-muted-foreground">Category</span>
           <span className="font-bold text-foreground">{application.category}</span>
@@ -52,23 +52,23 @@ export function ApplicationCard({ application, onApprove, onReject }: Applicatio
         </div>
       </div>
 
-      {application.status === 'Pending' && (
-        <div className="flex items-center gap-3">
-          <Button 
-            className="flex-1 bg-[#3A8F5C] text-white hover:bg-[#2d7348] rounded-full cursor-pointer font-bold h-11"
-            onClick={() => onApprove(application.id)}
-          >
-            Approve
-          </Button>
-          <Button 
-            variant="outline"
-            className="flex-1 border-[#EF4444]/30 text-[#EF4444] hover:bg-[#ffe5e5] hover:text-[#EF4444] hover:border-[#EF4444]/50 rounded-full cursor-pointer font-bold h-11 bg-transparent"
-            onClick={() => onReject(application.id)}
-          >
-            Reject
-          </Button>
-        </div>
-      )}
+      <div className="flex items-center gap-3">
+        <Button 
+          className="flex-1 bg-[#3A8F5C] text-white hover:bg-[#2d7348] rounded-full cursor-pointer font-bold h-10 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#3A8F5C]"
+          onClick={() => onApprove(application.id)}
+          disabled={application.status !== 'Pending'}
+        >
+          Approve
+        </Button>
+        <Button 
+          variant="outline"
+          className="flex-1 border-[#EF4444]/30 text-[#EF4444] hover:bg-[#ffe5e5] hover:text-[#EF4444] hover:border-[#EF4444]/50 rounded-full cursor-pointer font-bold h-10 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+          onClick={() => onReject(application.id)}
+          disabled={application.status !== 'Pending'}
+        >
+          Reject
+        </Button>
+      </div>
     </div>
   );
 }

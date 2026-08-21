@@ -19,9 +19,9 @@ export function UserDetailsSheet({ user, isOpen, onOpenChange }: UserDetailsShee
           </SheetTitle>
         </SheetHeader>
         {user && (
-          <div className="mt-8 flex flex-col gap-10 px-2 pb-6 animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="mt-6 flex flex-col gap-10 w-full animate-in fade-in slide-in-from-right-4 duration-500">
             {/* Header / Avatar Section */}
-            <div className="flex flex-col items-center gap-5 text-center">
+            <div className="flex flex-col items-center gap-5 text-center w-full">
               <Avatar className="h-[84px] w-[84px]">
                 <AvatarFallback className="bg-[#3A8F5C] text-white text-[32px] font-medium">
                   {user.name.charAt(0)}
@@ -34,7 +34,7 @@ export function UserDetailsSheet({ user, isOpen, onOpenChange }: UserDetailsShee
             </div>
 
             {/* Details Grid */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 w-full">
               {/* Status Card */}
               <div className="flex flex-col gap-2 p-5 rounded-2xl bg-card border border-border/40 shadow-[0_2px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300 group">
                 <div className="flex items-center gap-2 text-muted-foreground">

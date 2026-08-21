@@ -47,10 +47,10 @@ export function OrderDetailsSheet({ order, isOpen, onOpenChange }: OrderDetailsS
 
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-md overflow-y-auto border-l border-border p-0">
-        <SheetHeader className="p-6 border-b border-border bg-muted/20">
-          <SheetTitle className="text-lg font-bold flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary">
+      <SheetContent className="sm:max-w-md border-l-0 shadow-2xl bg-background/95 backdrop-blur-xl">
+        <SheetHeader className="mb-2">
+          <SheetTitle className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 flex items-center gap-3">
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 text-primary shrink-0">
               <ShoppingBag className="w-5 h-5" />
             </div>
             Order {order.orderId}
@@ -60,15 +60,15 @@ export function OrderDetailsSheet({ order, isOpen, onOpenChange }: OrderDetailsS
           </SheetDescription>
         </SheetHeader>
 
-        <div className="p-6 space-y-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2 p-4 rounded-xl border border-border bg-card shadow-sm">
+        <div className="mt-6 flex flex-col gap-6 w-full animate-in fade-in slide-in-from-right-4 duration-500">
+          <div className="grid grid-cols-2 gap-4 w-full">
+            <div className="space-y-2 p-5 rounded-2xl bg-card border border-border/40 shadow-[0_2px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300">
               <div className="text-[11px] font-bold text-muted-foreground flex items-center gap-2 uppercase tracking-wide">
                 <Calendar className="w-3.5 h-3.5 text-primary" /> Date
               </div>
               <div className="font-bold text-foreground text-[14px]">{order.date}</div>
             </div>
-            <div className="space-y-2 p-4 rounded-xl border border-border bg-card shadow-sm">
+            <div className="space-y-2 p-5 rounded-2xl bg-card border border-border/40 shadow-[0_2px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300">
               <div className="text-[11px] font-bold text-muted-foreground flex items-center gap-2 uppercase tracking-wide">
                 <DollarSign className="w-3.5 h-3.5 text-primary" /> Total
               </div>
@@ -76,21 +76,21 @@ export function OrderDetailsSheet({ order, isOpen, onOpenChange }: OrderDetailsS
             </div>
           </div>
 
-          <div className="space-y-2 p-5 rounded-xl border border-border bg-card shadow-sm">
+          <div className="space-y-2 p-5 rounded-2xl bg-card border border-border/40 shadow-[0_2px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300 w-full">
             <div className="text-[11px] font-bold text-muted-foreground flex items-center gap-2 mb-3 uppercase tracking-wide">
               <ShoppingBag className="w-3.5 h-3.5 text-primary" /> Item Ordered
             </div>
             <div className="font-bold text-[15px] text-foreground">{order.item}</div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2 p-4 rounded-xl border border-border bg-card shadow-sm">
+          <div className="grid grid-cols-2 gap-4 w-full">
+            <div className="space-y-2 p-5 rounded-2xl bg-card border border-border/40 shadow-[0_2px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300">
               <div className="text-[11px] font-bold text-muted-foreground flex items-center gap-2 uppercase tracking-wide">
                 <User className="w-3.5 h-3.5 text-primary" /> Buyer
               </div>
               <div className="font-bold text-foreground text-[14px]">{order.buyer}</div>
             </div>
-            <div className="space-y-2 p-4 rounded-xl border border-border bg-card shadow-sm">
+            <div className="space-y-2 p-5 rounded-2xl bg-card border border-border/40 shadow-[0_2px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300">
               <div className="text-[11px] font-bold text-muted-foreground flex items-center gap-2 uppercase tracking-wide">
                 <Store className="w-3.5 h-3.5 text-primary" /> Seller
               </div>
@@ -98,14 +98,14 @@ export function OrderDetailsSheet({ order, isOpen, onOpenChange }: OrderDetailsS
             </div>
           </div>
 
-          <div className="space-y-3 p-5 rounded-xl bg-muted/30 border border-border">
+          <div className="space-y-3 p-5 rounded-2xl bg-card border border-border/40 shadow-[0_2px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] transition-all duration-300 w-full">
             <h3 className="font-bold text-[11px] text-muted-foreground uppercase tracking-wider">Payment & Status</h3>
             <div className="flex flex-col gap-3 mt-3">
               <div className="flex items-center justify-between">
                 <span className="text-[13px] font-medium text-muted-foreground flex items-center gap-2">
                   <CreditCard className="w-4 h-4" /> Payment Method
                 </span>
-                <Badge variant="secondary" className={`px-4 py-3 rounded-full font-bold text-[11px] border-none ${getPaymentBadgeStyles(order.payment)}`}>
+                <Badge variant="secondary" className={`px-4 py-2 rounded-full font-bold text-[11px] border-none ${getPaymentBadgeStyles(order.payment)}`}>
                   {order.payment}
                 </Badge>
               </div>
@@ -113,7 +113,7 @@ export function OrderDetailsSheet({ order, isOpen, onOpenChange }: OrderDetailsS
                 <span className="text-[13px] font-medium text-muted-foreground flex items-center gap-2">
                   <ShoppingBag className="w-4 h-4" /> Order Status
                 </span>
-                <Badge variant="secondary" className={`px-4 py-3 rounded-full font-bold text-[11px] border-none ${getStatusBadgeStyles(order.status)}`}>
+                <Badge variant="secondary" className={`px-4 py-2 rounded-full font-bold text-[11px] border-none ${getStatusBadgeStyles(order.status)}`}>
                   {order.status}
                 </Badge>
               </div>
