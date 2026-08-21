@@ -15,22 +15,20 @@ export function DashboardLayoutClient({ children, currentRole }: DashboardLayout
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div 
-      className={cn(
-        "grid h-screen w-full bg-background overflow-hidden transition-all duration-300",
-        isCollapsed 
-          ? "md:grid-cols-[80px_1fr]" 
-          : "md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]"
-      )}
-    >
-      <div className="hidden bg-muted/40 md:block h-full overflow-hidden transition-all duration-300">
+    <div className="flex h-screen w-full bg-background overflow-hidden">
+      <div 
+        className={cn(
+          "hidden bg-muted/40 md:block h-full overflow-hidden transition-all duration-300 ease-in-out shrink-0",
+          isCollapsed ? "w-[80px]" : "w-[220px] lg:w-[280px]"
+        )}
+      >
         <Sidebar 
           currentRole={currentRole} 
           isCollapsed={isCollapsed} 
           onToggle={() => setIsCollapsed(!isCollapsed)} 
         />
       </div>
-      <div className="flex flex-col h-full overflow-hidden">
+      <div className="flex flex-col h-full flex-1 overflow-hidden min-w-0">
         <Header currentRole={currentRole} onToggle={() => setIsCollapsed(!isCollapsed)} />
         <main className="flex flex-1 flex-col gap-4 lg:gap-6 p-6 overflow-y-auto">
           {children}
