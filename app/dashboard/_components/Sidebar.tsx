@@ -58,7 +58,7 @@ export const Sidebar = memo(function Sidebar({ currentRole, className, isCollaps
   return (
     <div className={cn("h-full bg-card text-card-foreground flex flex-col relative transition-all duration-300", className)}>
       <div className={cn("flex items-center py-6 mb-2", isCollapsed ? "justify-center px-0" : "gap-3 px-6")}>
-        <Image src="/dashboard-logo.png" alt="Logo" width={40} height={40} className="rounded-lg object-contain shrink-0" />
+        <Image src="/login_page_logo.png" alt="Logo" width={40} height={40} className="rounded-lg object-contain shrink-0" />
         {!isCollapsed && (
           <div className="flex flex-col whitespace-nowrap">
             <span className="font-bold text-foreground text-[17px] leading-tight">Daily Meal</span>
