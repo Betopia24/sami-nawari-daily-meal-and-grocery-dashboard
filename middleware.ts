@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
 
   // Define routes that should be accessible without authentication
   const isAuthRoute = pathname.startsWith("/sign-in") || pathname.startsWith("/forgot-password");
-  
+
   // Define routes that require authentication
   const isProtectedRoute = pathname.startsWith("/dashboard");
 
