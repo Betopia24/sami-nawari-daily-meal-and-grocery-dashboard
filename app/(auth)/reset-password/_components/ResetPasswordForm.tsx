@@ -58,7 +58,7 @@ export default function ResetPasswordForm() {
             id="password"
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
-            className={`h-11 rounded-lg border-border focus-visible:ring-primary pr-10 ${errors.password ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+            className={`h-11 rounded-lg border-border focus-visible:ring-primary pr-10 ${errors.password ? 'border-destructive focus-visible:ring-destructive focus-visible:border-destructive' : ''}`}
             {...register("password")}
           />
           <button
@@ -92,7 +92,7 @@ export default function ResetPasswordForm() {
             id="confirmPassword"
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Enter your password"
-            className={`h-11 rounded-lg border-border focus-visible:ring-primary pr-10 ${errors.confirmPassword ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+            className={`h-11 rounded-lg border-border focus-visible:ring-primary pr-10 ${errors.confirmPassword ? 'border-destructive focus-visible:ring-destructive focus-visible:border-destructive' : ''}`}
             {...register("confirmPassword")}
           />
           <button

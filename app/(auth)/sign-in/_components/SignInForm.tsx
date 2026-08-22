@@ -56,7 +56,7 @@ export default function SignInForm() {
           id="email"
           type="email"
           placeholder="Enter your email"
-          className={`h-11 rounded-lg border-border focus-visible:ring-primary ${errors.email ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+          className={`h-11 rounded-lg border-border focus-visible:ring-primary ${errors.email ? 'border-destructive focus-visible:ring-destructive focus-visible:border-destructive' : ''}`}
           {...register("email")}
         />
         {errors.email && (
@@ -78,7 +78,7 @@ export default function SignInForm() {
             id="password"
             type={showPassword ? "text" : "password"}
             placeholder="Enter your password"
-            className={`h-11 rounded-lg border-border focus-visible:ring-primary pr-10 ${errors.password ? 'border-destructive focus-visible:ring-destructive' : ''}`}
+            className={`h-11 rounded-lg border-border focus-visible:ring-primary pr-10 ${errors.password ? 'border-destructive focus-visible:ring-destructive focus-visible:border-destructive' : ''}`}
             {...register("password")}
           />
           <button
