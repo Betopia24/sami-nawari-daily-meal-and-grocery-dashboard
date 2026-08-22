@@ -59,3 +59,9 @@ export async function signInAction(data: SignInInput) {
   // Redirect on successful login (cannot redirect inside try-catch if redirect throws in Next 14/15)
   redirect("/dashboard");
 }
+
+export async function signOutAction() {
+  const cookieStore = await cookies();
+  cookieStore.delete("auth_token");
+  redirect("/sign-in");
+}
