@@ -34,8 +34,8 @@ const NavItemButton = memo(function NavItemButton({ item, currentRole, isActive,
     <Button
       variant={isActive ? "default" : "ghost"}
       className={cn(
-        "text-[15px] font-semibold rounded-lg transition-all overflow-hidden",
-        isCollapsed ? "w-12 h-12 justify-center px-0 mx-auto" : "w-full justify-start px-5 h-12",
+        "text-[15px] font-semibold rounded-lg transition-all overflow-hidden border-0",
+        "w-full justify-start px-3 h-12",
         !isActive && "text-foreground hover:bg-muted/50"
       )}
       render={<Link href={item.href} />}
@@ -43,7 +43,7 @@ const NavItemButton = memo(function NavItemButton({ item, currentRole, isActive,
       onClick={onNavigate}
       title={isCollapsed ? item.title : undefined}
     >
-      <IconToUse className={cn("size-6 shrink-0", !isCollapsed && "mr-4")} />
+      <IconToUse className={cn("w-6 h-6 min-w-6 min-h-6 shrink-0", !isCollapsed && "mr-4")} />
       {!isCollapsed && <span className="truncate">{item.title}</span>}
     </Button>
   );
@@ -58,7 +58,7 @@ export const Sidebar = memo(function Sidebar({ currentRole, className, isCollaps
 
   return (
     <div className={cn("h-full bg-card text-card-foreground flex flex-col relative transition-all duration-300", className)}>
-      <div className={cn("flex items-center py-6 mb-2", isCollapsed ? "justify-center px-0" : "gap-3 px-6")}>
+      <div className={cn("flex items-center h-[88px] mb-2 transition-all", isCollapsed ? "justify-center px-0" : "gap-3 px-6")}>
         <Image src="/logo.png" alt="Logo" width={160} height={160} unoptimized priority className="w-10 h-10 rounded-lg object-contain shrink-0" />
         {!isCollapsed && (
           <div className="flex flex-col whitespace-nowrap">
@@ -69,7 +69,7 @@ export const Sidebar = memo(function Sidebar({ currentRole, className, isCollaps
       </div>
 
       <div className="flex-1 overflow-y-auto overflow-x-hidden">
-        <div className={cn("space-y-2", isCollapsed ? "flex flex-col items-center px-0" : "px-4")}>
+        <div className="space-y-2 flex flex-col px-4">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
 
@@ -86,18 +86,18 @@ export const Sidebar = memo(function Sidebar({ currentRole, className, isCollaps
           })}
         </div>
       </div>
-      <div className={cn("mt-auto pb-4 flex", isCollapsed ? "justify-center px-2" : "px-4")}>
-        <form action={signOutAction} className="w-full flex justify-center">
+      <div className="mt-auto pb-4 flex px-4">
+        <form action={signOutAction} className="w-full flex">
           <Button
             type="submit"
             variant="ghost"
             className={cn(
-              "text-[15px] font-semibold rounded-lg text-[#E7000B] hover:text-[#E7000B] hover:bg-red-50/50 transition-all overflow-hidden",
-              isCollapsed ? "w-12 h-12 justify-center px-0" : "w-full justify-start px-5 h-12"
+              "text-[15px] font-semibold rounded-lg text-[#E7000B] hover:text-[#E7000B] hover:bg-red-50/50 transition-all overflow-hidden border-0",
+              "w-full justify-start px-3 h-12"
             )}
             title={isCollapsed ? "Log Out" : undefined}
           >
-            <LogoutIcon className={cn("size-6 shrink-0", !isCollapsed && "mr-4")} />
+            <LogoutIcon className={cn("w-6 h-6 min-w-6 min-h-6 shrink-0", !isCollapsed && "mr-4")} />
             {!isCollapsed && <span className="truncate">Log Out</span>}
           </Button>
         </form>
