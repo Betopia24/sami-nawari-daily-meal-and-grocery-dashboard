@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Retrieve the token from cookies
-  const token = request.cookies.get("auth_token")?.value;
+  const token = request.cookies.get("accessToken")?.value;
 
   // Define routes that should be accessible without authentication
   const isAuthRoute = pathname.startsWith("/sign-in") || pathname.startsWith("/forgot-password");
@@ -13,13 +13,13 @@ export function middleware(request: NextRequest) {
   // Define routes that require authentication
   const isProtectedRoute = pathname.startsWith("/dashboard");
 
-  // if (isProtectedRoute && !token) {
-  //   // If trying to access a protected route without a token, redirect to sign-in
-  //   const url = new URL("/sign-in", request.url);
-  //   // Optional: save the callback url to redirect back after login
-  //   // url.searchParams.set("callbackUrl", pathname);
-  //   return NextResponse.redirect(url);
-  // }
+  if (isProtectedRoute && !token) {
+    // If trying to access a protected route without a token, redirect to sign-in
+    const url = new URL("/sign-in", request.url);
+    // Optional: save the callback url to redirect back after login
+    // url.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(url);
+  }
 
   if (isAuthRoute && token) {
     // If trying to access auth routes (like sign-in) but already logged in, redirect to dashboard

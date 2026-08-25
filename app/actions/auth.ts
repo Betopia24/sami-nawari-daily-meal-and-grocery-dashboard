@@ -19,35 +19,41 @@ export async function signInAction(data: SignInInput) {
   const { email, password, rememberMe } = parsed.data;
 
   try {
-    // ---------------------------------------------------------
-    // TODO: Connect to your actual backend API here
-    // Example:
-    // const response = await fetch("https://api.example.com/login", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ email, password }),
-    // });
-    // const result = await response.json();
-    // if (!response.ok) throw new Error(result.message || "Failed to sign in");
-    // const token = result.token;
-    // ---------------------------------------------------------
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://206.162.244.134:5478/api/v1";
+    const response = await fetch(`${baseUrl}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+    
+    const result = await response.json();
 
-    // Mock API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Failed to sign in");
+    }
 
-    // Mock token for demonstration
-    const token = "mock_jwt_token_12345";
+    const { accessToken, refreshToken } = result.data;
 
-    // Set HTTP-only cookie
     const cookieStore = await cookies();
-    cookieStore.set("auth_token", token, {
+    const maxAge = rememberMe ? 60 * 60 * 24 * 30 : undefined; // 30 days or session
+
+    cookieStore.set("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      // If remember me is checked, token lasts for 30 days, else session cookie
-      maxAge: rememberMe ? 60 * 60 * 24 * 30 : undefined,
+      maxAge,
     });
+
+    if (refreshToken) {
+      cookieStore.set("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge,
+      });
+    }
 
   } catch (error: any) {
     return {
@@ -62,6 +68,7 @@ export async function signInAction(data: SignInInput) {
 
 export async function signOutAction() {
   const cookieStore = await cookies();
-  cookieStore.delete("auth_token");
+  cookieStore.delete("accessToken");
+  cookieStore.delete("refreshToken");
   redirect("/sign-in");
 }

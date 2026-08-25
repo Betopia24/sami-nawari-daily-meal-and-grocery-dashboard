@@ -25,7 +25,10 @@ export default function ForgotPasswordPage() {
 
       toast.success("If an account exists, a reset link has been sent to your email.");
       setEmail("");
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+        throw error;
+      }
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsPending(false);

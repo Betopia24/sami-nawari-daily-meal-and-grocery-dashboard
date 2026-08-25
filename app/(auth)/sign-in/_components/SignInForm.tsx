@@ -36,7 +36,12 @@ export default function SignInForm() {
         toast.error(result.error);
       }
       // If successful, it will redirect, so no need for toast/state updates
-    } catch (error) {
+    } catch (error: any) {
+      // Next.js redirect() throws an error on the client that we need to re-throw or ignore
+      if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+        throw error;
+      }
+      console.error(error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsPending(false);

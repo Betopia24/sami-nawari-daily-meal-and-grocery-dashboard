@@ -37,7 +37,10 @@ export default function ResetPasswordForm() {
       setTimeout(() => {
         router.push("/reset-success");
       }, 2000);
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
+        throw error;
+      }
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsPending(false);
