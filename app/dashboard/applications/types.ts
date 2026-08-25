@@ -1,5 +1,5 @@
 export interface Application {
-  id: number;
+  id: string | number;
   ownerName: string;
   kitchenName: string;
   category: string;

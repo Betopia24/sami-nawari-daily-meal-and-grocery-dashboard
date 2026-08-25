@@ -1,12 +1,13 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { Application } from "../types";
 
 interface ApplicationCardProps {
   application: Application;
-  onApprove: (id: number) => void;
-  onReject: (id: number) => void;
+  onApprove: (id: string | number) => void;
+  onReject: (id: string | number) => void;
 }
 
 export function ApplicationCard({ application, onApprove, onReject }: ApplicationCardProps) {
@@ -23,12 +24,12 @@ export function ApplicationCard({ application, onApprove, onReject }: Applicatio
   };
 
   return (
-    <div className="bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300">
+    <div className="bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
       <div className="flex justify-between items-start mb-5">
         <div className="flex items-center gap-4">
           <Avatar className="h-12 w-12 bg-[#3A8F5C]">
             <AvatarFallback className="bg-[#3A8F5C] text-white text-lg font-semibold">
-              {application.ownerName.charAt(0)}
+              {application.ownerName.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div>
@@ -52,22 +53,30 @@ export function ApplicationCard({ application, onApprove, onReject }: Applicatio
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Button 
-          className="flex-1 bg-[#3A8F5C] text-white hover:bg-[#2d7348] rounded-full cursor-pointer font-bold h-10 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#3A8F5C]"
-          onClick={() => onApprove(application.id)}
-          disabled={application.status !== 'Pending'}
-        >
-          Approve
-        </Button>
-        <Button 
-          variant="outline"
-          className="flex-1 border-[#EF4444]/30 text-[#EF4444] hover:bg-[#ffe5e5] hover:text-[#EF4444] hover:border-[#EF4444]/50 rounded-full cursor-pointer font-bold h-10 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent"
-          onClick={() => onReject(application.id)}
-          disabled={application.status !== 'Pending'}
-        >
-          Reject
-        </Button>
+      <div className="h-10 mt-auto">
+        {application.status === 'Pending' ? (
+          <div className="flex items-center gap-3 h-full">
+            <Button 
+              className="flex-1 bg-[#3A8F5C] text-white hover:bg-[#2d7348] rounded-full cursor-pointer font-bold h-10"
+              onClick={() => onApprove(application.id)}
+            >
+              Approve
+            </Button>
+            <Button 
+              variant="outline"
+              className="flex-1 border-[#EF4444]/30 text-[#EF4444] hover:bg-[#ffe5e5] hover:text-[#EF4444] hover:border-[#EF4444]/50 rounded-full cursor-pointer font-bold h-10 bg-transparent"
+              onClick={() => onReject(application.id)}
+            >
+              Reject
+            </Button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center h-full w-full">
+            <span className="text-[13px] font-medium text-muted-foreground opacity-50">
+              Application has been reviewed
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
