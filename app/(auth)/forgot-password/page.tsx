@@ -6,10 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import AuthLogo from "../_components/AuthLogo";
+import { forgotPasswordAction } from "@/app/actions/auth";
+import { useRouter } from "next/navigation";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,15 +23,15 @@ export default function ForgotPasswordPage() {
 
     setIsPending(true);
     try {
-      // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      toast.success("If an account exists, a reset link has been sent to your email.");
-      setEmail("");
-    } catch (error: any) {
-      if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
-        throw error;
+      const result = await forgotPasswordAction(email);
+      
+      if (result.success) {
+        toast.success(result.message || "If an account exists, a reset link has been sent to your email.");
+        router.push(`/otp?email=${encodeURIComponent(email)}`);
+      } else {
+        toast.error(result.error);
       }
+    } catch (error: any) {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsPending(false);

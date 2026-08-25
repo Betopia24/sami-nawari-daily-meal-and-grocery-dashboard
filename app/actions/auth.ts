@@ -62,8 +62,7 @@ export async function signInAction(data: SignInInput) {
     };
   }
 
-  // Redirect on successful login (cannot redirect inside try-catch if redirect throws in Next 14/15)
-  redirect("/dashboard");
+  return { success: true };
 }
 
 export async function signOutAction() {
@@ -71,4 +70,134 @@ export async function signOutAction() {
   cookieStore.delete("accessToken");
   cookieStore.delete("refreshToken");
   redirect("/sign-in");
+}
+
+export async function forgotPasswordAction(email: string) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://206.162.244.134:5478/api/v1";
+    const response = await fetch(`${baseUrl}/auth/forgot-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Failed to send reset link");
+    }
+
+    return {
+      success: true,
+      message: result.message,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "An unexpected error occurred. Please try again.",
+    };
+  }
+}
+
+export async function verifyOtpAction(data: { email: string; code: string }) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://206.162.244.134:5478/api/v1";
+    const response = await fetch(`${baseUrl}/auth/verify-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: data.email, code: data.code }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Invalid OTP code!");
+    }
+
+    const { resetToken } = result.data;
+    const cookieStore = await cookies();
+    
+    // Store resetToken in a short-lived cookie (e.g., 15 minutes) for the reset password step
+    cookieStore.set("resetToken", resetToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 15 * 60,
+    });
+
+    return {
+      success: true,
+      message: result.message,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "An unexpected error occurred. Please try again.",
+    };
+  }
+}
+
+export async function resendOtpAction(email: string) {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://206.162.244.134:5478/api/v1";
+    const response = await fetch(`${baseUrl}/auth/resend-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, type: "PASSWORD_RESET" }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Failed to resend OTP");
+    }
+
+    return {
+      success: true,
+      message: result.message,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "An unexpected error occurred. Please try again.",
+    };
+  }
+}
+
+export async function resetPasswordAction(password: string) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("resetToken")?.value;
+
+    if (!token) {
+      throw new Error("Reset token not found. Please verify your OTP again.");
+    }
+
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://206.162.244.134:5478/api/v1";
+    const response = await fetch(`${baseUrl}/auth/reset-password?token=${token}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Failed to reset password");
+    }
+
+    // Clean up resetToken after success
+    cookieStore.delete("resetToken");
+
+    return {
+      success: true,
+      message: result.message,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "An unexpected error occurred. Please try again.",
+    };
+  }
 }

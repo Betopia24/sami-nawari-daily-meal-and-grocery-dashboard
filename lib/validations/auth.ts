@@ -17,3 +17,11 @@ export const resetPasswordSchema = z.object({
 });
 
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+
+export const otpSchema = z.object({
+  otp: z.string().min(6, {
+    message: "Your one-time password must be 6 characters.",
+  }),
+});
+
+export type OtpInput = z.infer<typeof otpSchema>;

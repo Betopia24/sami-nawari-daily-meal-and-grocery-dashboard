@@ -10,6 +10,8 @@ import { toast } from "sonner";
 import { resetPasswordSchema, type ResetPasswordInput } from "@/lib/validations/auth";
 import { useRouter } from "next/navigation";
 
+import { resetPasswordAction } from "@/app/actions/auth";
+
 export default function ResetPasswordForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -22,6 +24,7 @@ export default function ResetPasswordForm() {
     formState: { errors },
   } = useForm<ResetPasswordInput>({
     resolver: zodResolver(resetPasswordSchema),
+    mode: "onChange",
     defaultValues: {
       password: "",
       confirmPassword: "",
@@ -31,16 +34,17 @@ export default function ResetPasswordForm() {
   const onSubmit = async (data: ResetPasswordInput) => {
     setIsPending(true);
     try {
-      // Mock API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Password reset successfully! Redirecting to sign in...");
-      setTimeout(() => {
-        router.push("/reset-success");
-      }, 2000);
-    } catch (error: any) {
-      if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
-        throw error;
+      const result = await resetPasswordAction(data.password);
+      
+      if (result.success) {
+        toast.success(result.message || "Password reset successfully! Redirecting to sign in...");
+        setTimeout(() => {
+          router.push("/reset-success");
+        }, 1000);
+      } else {
+        toast.error(result.error);
       }
+    } catch (error: any) {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsPending(false);

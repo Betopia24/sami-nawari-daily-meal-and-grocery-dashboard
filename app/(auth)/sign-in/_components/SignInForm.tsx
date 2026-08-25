@@ -11,9 +11,12 @@ import { toast } from "sonner";
 import { signInAction } from "@/app/actions/auth";
 import { signInSchema, type SignInInput } from "@/lib/validations/auth";
 
+import { useRouter } from "next/navigation";
+
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -34,14 +37,10 @@ export default function SignInForm() {
       const result = await signInAction(data);
       if (result && !result.success) {
         toast.error(result.error);
+      } else {
+        router.push("/dashboard");
       }
-      // If successful, it will redirect, so no need for toast/state updates
     } catch (error: any) {
-      // Next.js redirect() throws an error on the client that we need to re-throw or ignore
-      if (error?.message === 'NEXT_REDIRECT' || error?.digest?.startsWith('NEXT_REDIRECT')) {
-        throw error;
-      }
-      console.error(error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsPending(false);
