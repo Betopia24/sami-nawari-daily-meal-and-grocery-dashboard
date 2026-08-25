@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LockIcon } from "@/components/icons";
 import { Eye, EyeOff } from "lucide-react";
+import { updatePasswordAction } from "@/app/actions/profile";
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, "Current password is required"),
@@ -42,10 +43,23 @@ export function PasswordForm() {
     },
   });
 
-  const onSubmit = (data: PasswordFormValues) => {
-    console.log("Password updated:", data);
-    toast.success("Password changed successfully!");
-    reset(); // Clear form on success
+  const onSubmit = async (data: PasswordFormValues) => {
+    const toastId = toast.loading("Updating password...");
+    try {
+      const result = await updatePasswordAction({
+        oldPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      });
+
+      if (result.success) {
+        toast.success(result.message || "Password changed successfully!", { id: toastId });
+        reset(); // Clear form on success
+      } else {
+        toast.error(result.error || "Failed to update password", { id: toastId });
+      }
+    } catch (error) {
+      toast.error("An unexpected error occurred", { id: toastId });
+    }
   };
 
   return (

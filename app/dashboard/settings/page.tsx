@@ -2,8 +2,11 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { ProfileForm } from "./_components/ProfileForm";
 import { PasswordForm } from "./_components/PasswordForm";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
+import { getCurrentUser } from "@/app/actions/profile";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const user = await getCurrentUser();
+
   return (
     <div className="flex flex-1 flex-col gap-6 w-full pb-10">
       <MotionWrapper delay={0.1}>
@@ -15,7 +18,7 @@ export default function SettingsPage() {
 
       <div className="flex flex-col w-full">
         <MotionWrapper delay={0.2}>
-          <ProfileForm />
+          <ProfileForm initialData={user} />
         </MotionWrapper>
         
         <MotionWrapper delay={0.3}>
