@@ -9,51 +9,57 @@ import { ApplicationCard } from "./_components/ApplicationCard";
 import { Application } from "./types";
 import { getSellerRequests, reviewSellerRequest } from "@/app/actions/admin";
 import { toast } from "sonner";
+import { CardGridPageSkeleton } from "@/components/common/CardGridPageSkeleton";
 
 
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 6;
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getSellerRequests();
-      if (data && Array.isArray(data)) {
-        const formattedData: Application[] = data.map((req: any) => {
-          // Format date like "Aug 5, 2024"
-          const date = new Date(req.createdAt);
-          const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-          
-          // Format status like "PENDING" -> "Pending"
-          const statusStr = req.status || "PENDING";
-          const formattedStatus = statusStr.charAt(0).toUpperCase() + statusStr.slice(1).toLowerCase();
-
-          // Format category (cuisine) to handle multiple types: ["MEDITERRANEAN", "ITALIAN", "CHINESE"] -> "Mediterranean, Italian, +1 More"
-          let formattedCategory = "Other";
-          if (Array.isArray(req.cuisineTypes) && req.cuisineTypes.length > 0) {
-            const firstTwo = req.cuisineTypes.slice(0, 2).map((cuisine: string) => 
-              cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase()
-            );
+      try {
+        const data = await getSellerRequests();
+        if (data && Array.isArray(data)) {
+          const formattedData: Application[] = data.map((req: any) => {
+            // Format date like "Aug 5, 2024"
+            const date = new Date(req.createdAt);
+            const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             
-            if (req.cuisineTypes.length > 2) {
-              const remainingCount = req.cuisineTypes.length - 2;
-              formattedCategory = `${firstTwo.join(", ")}, +${remainingCount} More`;
-            } else {
-              formattedCategory = firstTwo.join(", ");
-            }
-          }
+            // Format status like "PENDING" -> "Pending"
+            const statusStr = req.status || "PENDING";
+            const formattedStatus = statusStr.charAt(0).toUpperCase() + statusStr.slice(1).toLowerCase();
 
-          return {
-            id: req.id,
-            ownerName: req.ownerName || "Unknown",
-            kitchenName: req.businessName || "Unknown",
-            category: formattedCategory,
-            appliedDate: formattedDate,
-            status: formattedStatus,
-          };
-        });
-        setApplications(formattedData);
+            // Format category (cuisine) to handle multiple types: ["MEDITERRANEAN", "ITALIAN", "CHINESE"] -> "Mediterranean, Italian, +1 More"
+            let formattedCategory = "Other";
+            if (Array.isArray(req.cuisineTypes) && req.cuisineTypes.length > 0) {
+              const firstTwo = req.cuisineTypes.slice(0, 2).map((cuisine: string) => 
+                cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase()
+              );
+              
+              if (req.cuisineTypes.length > 2) {
+                const remainingCount = req.cuisineTypes.length - 2;
+                formattedCategory = `${firstTwo.join(", ")}, +${remainingCount} More`;
+              } else {
+                formattedCategory = firstTwo.join(", ");
+              }
+            }
+
+            return {
+              id: req.id,
+              ownerName: req.ownerName || "Unknown",
+              kitchenName: req.businessName || "Unknown",
+              category: formattedCategory,
+              appliedDate: formattedDate,
+              status: formattedStatus,
+            };
+          });
+          setApplications(formattedData);
+        }
+      } finally {
+        setIsLoading(false);
       }
     }
     fetchData();
@@ -86,6 +92,10 @@ export default function ApplicationsPage() {
       toast.error(result.error || "Failed to reject", { id: toastId });
     }
   };
+
+  if (isLoading) {
+    return <CardGridPageSkeleton />;
+  }
 
   return (
     <div className="flex flex-1 flex-col gap-6">

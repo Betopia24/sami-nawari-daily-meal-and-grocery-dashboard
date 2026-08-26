@@ -2,11 +2,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 
 interface UserActionDialogsProps {
-  userToSuspend: number | null;
-  userToActivate: number | null;
+  userToSuspend: string | null;
+  userToActivate: string | null;
   onCloseSuspend: () => void;
   onCloseActivate: () => void;
-  onToggleStatus: (userId: number) => void;
+  onToggleStatus: (userId: string, targetStatus: "ACTIVE" | "SUSPENDED") => void;
 }
 
 export function UserActionDialogs({
@@ -31,7 +31,7 @@ export function UserActionDialogs({
             <Button variant="outline" className="cursor-pointer" onClick={onCloseSuspend}>Cancel</Button>
             <Button variant="destructive" className="cursor-pointer" onClick={() => {
               if (userToSuspend !== null) {
-                onToggleStatus(userToSuspend);
+                onToggleStatus(userToSuspend, "SUSPENDED");
                 onCloseSuspend();
               }
             }}>
@@ -54,7 +54,7 @@ export function UserActionDialogs({
             <Button variant="outline" className="cursor-pointer" onClick={onCloseActivate}>Cancel</Button>
             <Button className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90" onClick={() => {
               if (userToActivate !== null) {
-                onToggleStatus(userToActivate);
+                onToggleStatus(userToActivate, "ACTIVE");
                 onCloseActivate();
               }
             }}>

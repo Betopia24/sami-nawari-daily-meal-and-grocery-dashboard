@@ -1,9 +1,14 @@
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
-  status: string;
-  joined: string;
-  orders: number;
   role: string;
+  status: string;
+  profilePicture: string | null;
+  createdAt: string;
+  updatedAt: string;
+  _count: {
+    orders: number;
+  };
+  ordersCount: number;
 }

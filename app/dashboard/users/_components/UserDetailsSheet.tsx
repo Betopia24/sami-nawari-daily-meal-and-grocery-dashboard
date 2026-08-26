@@ -24,7 +24,7 @@ export function UserDetailsSheet({ user, isOpen, onOpenChange }: UserDetailsShee
             <div className="flex flex-col items-center gap-5 text-center w-full">
               <Avatar className="h-[84px] w-[84px]">
                 <AvatarFallback className="bg-[#3A8F5C] text-white text-[32px] font-medium">
-                  {user.name.charAt(0)}
+                  {user.name.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-center">
@@ -42,7 +42,7 @@ export function UserDetailsSheet({ user, isOpen, onOpenChange }: UserDetailsShee
                   <span className="text-[13px] font-medium uppercase tracking-wider">Status</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${user.status === 'Active' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : user.status === 'Suspended' ? 'bg-red-500' : 'bg-amber-500'} animate-pulse`} />
+                  <span className={`w-2 h-2 rounded-full ${user.status === 'ACTIVE' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : user.status === 'SUSPENDED' ? 'bg-red-500' : 'bg-amber-500'} animate-pulse`} />
                   <span className="text-[16px] font-semibold text-foreground">{user.status}</span>
                 </div>
               </div>
@@ -62,7 +62,7 @@ export function UserDetailsSheet({ user, isOpen, onOpenChange }: UserDetailsShee
                   <CalendarDays className="w-4 h-4 text-purple-500 group-hover:scale-110 transition-transform" />
                   <span className="text-[13px] font-medium uppercase tracking-wider">Joined</span>
                 </div>
-                <span className="text-[16px] font-semibold text-foreground">{user.joined}</span>
+                <span className="text-[16px] font-semibold text-foreground">{new Date(user.createdAt).toLocaleDateString()}</span>
               </div>
 
               {/* Orders Card */}
@@ -71,7 +71,7 @@ export function UserDetailsSheet({ user, isOpen, onOpenChange }: UserDetailsShee
                   <ShoppingBag className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
                   <span className="text-[13px] font-medium uppercase tracking-wider">Orders</span>
                 </div>
-                <span className="text-[16px] font-semibold text-foreground">{user.orders}</span>
+                <span className="text-[16px] font-semibold text-foreground">{user.ordersCount}</span>
               </div>
             </div>
           </div>

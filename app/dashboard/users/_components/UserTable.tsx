@@ -6,8 +6,8 @@ import { User } from "../types";
 interface UserTableProps {
   users: User[];
   onViewUser: (user: User) => void;
-  onSuspendUser: (userId: number) => void;
-  onActivateUser: (userId: number) => void;
+  onSuspendUser: (userId: string) => void;
+  onActivateUser: (userId: string) => void;
 }
 
 export function UserTable({ users, onViewUser, onSuspendUser, onActivateUser }: UserTableProps) {
@@ -58,7 +58,7 @@ export function UserTable({ users, onViewUser, onSuspendUser, onActivateUser }: 
                 <div className="flex items-center gap-3">
                   <Avatar className="h-8 w-8">
                     <AvatarFallback className="bg-primary text-primary-foreground font-semibold text-xs">
-                      {user.name.charAt(0)}
+                      {user.name.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <span className="font-semibold text-foreground text-sm">{user.name}</span>
@@ -66,24 +66,26 @@ export function UserTable({ users, onViewUser, onSuspendUser, onActivateUser }: 
               </TableCell>
               <TableCell className="px-6 py-4 text-muted-foreground text-[13px]">{user.email}</TableCell>
               <TableCell className="px-6 py-4">
-                <Badge variant="secondary" className={`rounded-full px-4 py-3 border-none text-[11px] font-bold ${getStatusBadgeStyles(user.status)}`}>
+                <Badge variant="secondary" className={`rounded-full px-4 py-3 border-none text-[11px] font-bold ${getStatusBadgeStyles(user.status.charAt(0).toUpperCase() + user.status.slice(1).toLowerCase())}`}>
                   {user.status}
                 </Badge>
               </TableCell>
-              <TableCell className="px-6 py-4 text-muted-foreground text-[13px]">{user.joined}</TableCell>
-              <TableCell className="px-6 py-4 text-foreground text-sm font-medium">{user.orders}</TableCell>
+              <TableCell className="px-6 py-4 text-muted-foreground text-[13px]">{new Date(user.createdAt).toLocaleDateString()}</TableCell>
+              <TableCell className="px-6 py-4 text-foreground text-sm font-medium">{user.ordersCount}</TableCell>
               <TableCell className="px-6 py-4">
-                <Badge variant="secondary" className={`rounded-full px-4 py-3 border-none text-[11px] font-bold ${getRoleBadgeStyles(user.role)}`}>
+                <Badge variant="secondary" className={`rounded-full px-4 py-3 border-none text-[11px] font-bold ${getRoleBadgeStyles(user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase())}`}>
                   {user.role}
                 </Badge>
               </TableCell>
               <TableCell className="px-6 py-4">
                 <div className="flex items-center gap-4">
                   <button onClick={() => onViewUser(user)} className="cursor-pointer text-primary font-bold text-[13px] hover:underline">View</button>
-                  {user.status === "Suspended" ? (
-                    <button onClick={() => onActivateUser(user.id)} className="cursor-pointer text-primary font-bold text-[13px] hover:underline">Activate</button>
-                  ) : (
-                    <button onClick={() => onSuspendUser(user.id)} className="cursor-pointer text-destructive font-bold text-[13px] hover:underline">Suspend</button>
+                  {user.role !== "ADMIN" && (
+                    user.status === "SUSPENDED" ? (
+                      <button onClick={() => onActivateUser(user.id)} className="cursor-pointer text-primary font-bold text-[13px] hover:underline">Activate</button>
+                    ) : (
+                      <button onClick={() => onSuspendUser(user.id)} className="cursor-pointer text-destructive font-bold text-[13px] hover:underline">Suspend</button>
+                    )
                   )}
                 </div>
               </TableCell>
