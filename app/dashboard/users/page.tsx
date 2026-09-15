@@ -123,7 +123,13 @@ function UsersPageContent() {
       const response = await changeUserStatus(userId, targetStatus);
       if (response && response.success) {
         toast.success(response.message || `User status changed to ${targetStatus}`);
-        fetchUsers();
+        setUsers(prevUsers => 
+          prevUsers.map(user => 
+            user.id.toString() === userId 
+              ? { ...user, status: targetStatus } 
+              : user
+          )
+        );
       } else {
         toast.error(response?.message || "Failed to update user status");
       }

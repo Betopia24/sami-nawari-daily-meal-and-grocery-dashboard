@@ -24,11 +24,11 @@ export function SellerDetailsSheet({ seller, isOpen, onOpenChange }: SellerDetai
             <div className="flex flex-col items-center gap-5 text-center w-full">
               <Avatar className="h-[84px] w-[84px]">
                 <AvatarFallback className="bg-[#3A8F5C] text-white text-[32px] font-medium">
-                  {seller.kitchenName.charAt(0)}
+                  {seller.businessName.charAt(0)}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col items-center">
-                <h3 className="text-2xl font-semibold text-foreground tracking-tight">{seller.kitchenName}</h3>
+                <h3 className="text-2xl font-semibold text-foreground tracking-tight">{seller.businessName}</h3>
                 <p className="text-[15px] font-medium text-muted-foreground mt-1 bg-muted/50 px-3 py-1 rounded-full">{seller.ownerName}</p>
               </div>
             </div>
@@ -42,7 +42,7 @@ export function SellerDetailsSheet({ seller, isOpen, onOpenChange }: SellerDetai
                   <span className="text-[13px] font-medium uppercase tracking-wider">Status</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${seller.status === 'Approved' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : seller.status === 'Suspended' ? 'bg-red-500' : 'bg-amber-500'} animate-pulse`} />
+                  <span className={`w-2 h-2 rounded-full ${seller.status.toUpperCase() === 'APPROVED' ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : seller.status.toUpperCase() === 'SUSPENDED' ? 'bg-red-500' : 'bg-amber-500'} animate-pulse`} />
                   <span className="text-[16px] font-semibold text-foreground">{seller.status}</span>
                 </div>
               </div>
@@ -53,7 +53,7 @@ export function SellerDetailsSheet({ seller, isOpen, onOpenChange }: SellerDetai
                   <Star className="w-4 h-4 text-yellow-500 group-hover:scale-110 transition-transform" />
                   <span className="text-[13px] font-medium uppercase tracking-wider">Rating</span>
                 </div>
-                <span className="text-[16px] font-semibold text-foreground">{seller.rating !== null ? seller.rating : "—"}</span>
+                <span className="text-[16px] font-semibold text-foreground">{seller.averageRating !== null ? seller.averageRating : "—"}</span>
               </div>
 
               {/* Orders Card */}
@@ -62,7 +62,7 @@ export function SellerDetailsSheet({ seller, isOpen, onOpenChange }: SellerDetai
                   <ShoppingBag className="w-4 h-4 text-amber-500 group-hover:scale-110 transition-transform" />
                   <span className="text-[13px] font-medium uppercase tracking-wider">Orders</span>
                 </div>
-                <span className="text-[16px] font-semibold text-foreground">{seller.orders}</span>
+                <span className="text-[16px] font-semibold text-foreground">{seller.totalOrders}</span>
               </div>
 
               {/* Foods Card */}
@@ -71,7 +71,7 @@ export function SellerDetailsSheet({ seller, isOpen, onOpenChange }: SellerDetai
                   <Utensils className="w-4 h-4 text-orange-500 group-hover:scale-110 transition-transform" />
                   <span className="text-[13px] font-medium uppercase tracking-wider">Foods</span>
                 </div>
-                <span className="text-[16px] font-semibold text-foreground">{seller.foods}</span>
+                <span className="text-[16px] font-semibold text-foreground">{seller.totalFoods}</span>
               </div>
             </div>
           </div>

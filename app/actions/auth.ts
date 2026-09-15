@@ -34,6 +34,27 @@ export async function signInAction(data: SignInInput) {
 
     const { accessToken, refreshToken } = result.data;
 
+    // Verify user role from JWT token
+    let userRole = "";
+    try {
+      const base64Url = accessToken.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      const decoded = JSON.parse(jsonPayload);
+      userRole = decoded.role;
+    } catch (error) {
+      throw new Error("Failed to parse authentication token.");
+    }
+
+    if (!userRole || userRole.toUpperCase() !== "ADMIN") {
+      throw new Error("Access Denied: Only admins can log in to the dashboard");
+    }
+
     const cookieStore = await cookies();
     const maxAge = rememberMe ? 60 * 60 * 24 * 30 : undefined; // 30 days or session
 

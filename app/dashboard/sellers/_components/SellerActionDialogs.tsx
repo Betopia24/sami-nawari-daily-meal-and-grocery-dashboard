@@ -2,11 +2,11 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Button } from "@/components/ui/button";
 
 interface SellerActionDialogsProps {
-  sellerToSuspend: number | null;
-  sellerToActivate: number | null;
+  sellerToSuspend: string | null;
+  sellerToActivate: string | null;
   onCloseSuspend: () => void;
   onCloseActivate: () => void;
-  onToggleStatus: (sellerId: number) => void;
+  onToggleStatus: (sellerId: string) => void;
 }
 
 export function SellerActionDialogs({

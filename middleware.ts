@@ -13,12 +13,35 @@ export function middleware(request: NextRequest) {
   // Define routes that require authentication
   const isProtectedRoute = pathname.startsWith("/dashboard");
 
-  if (isProtectedRoute && !token) {
-    // If trying to access a protected route without a token, redirect to sign-in
-    const url = new URL("/sign-in", request.url);
-    // Optional: save the callback url to redirect back after login
-    // url.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(url);
+  if (isProtectedRoute) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
+
+    try {
+      // Decode JWT payload without verifying signature (Edge compatible)
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      const decoded = JSON.parse(jsonPayload);
+
+      if (decoded.role !== "ADMIN") {
+        // If logged in but not an admin, redirect back to login or an unauthorized page
+        // We delete the token cookie so they are forced to log in again as admin
+        const response = NextResponse.redirect(new URL("/sign-in?error=unauthorized", request.url));
+        response.cookies.delete("accessToken");
+        response.cookies.delete("refreshToken");
+        return response;
+      }
+    } catch (e) {
+      // Invalid token
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
   }
 
   if (isAuthRoute && token) {

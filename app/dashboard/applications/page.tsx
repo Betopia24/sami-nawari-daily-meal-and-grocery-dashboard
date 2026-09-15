@@ -21,38 +21,11 @@ import {
 import { Button } from "@/components/ui/button";
 
 
-const MOCK_APPLICATIONS: Application[] = [
-  {
-    id: "m1",
-    ownerName: "John Doe",
-    kitchenName: "John's Pizza & Pasta",
-    category: "Italian, Fast Food",
-    appliedDate: "Sep 10, 2024",
-    status: "Pending",
-  },
-  {
-    id: "m2",
-    ownerName: "Sarah Smith",
-    kitchenName: "Healthy Bites",
-    category: "Vegan, Salad",
-    appliedDate: "Sep 09, 2024",
-    status: "Pending",
-  },
-  {
-    id: "m3",
-    ownerName: "Ahmed Ali",
-    kitchenName: "Spice Route",
-    category: "Indian, Curry",
-    appliedDate: "Sep 08, 2024",
-    status: "Pending",
-  },
-];
-
 export default function ApplicationsPage() {
   const [applications, setApplications] = useState<Application[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   // Rejection Modal State
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [selectedAppIdToReject, setSelectedAppIdToReject] = useState<string | number | null>(null);
@@ -70,7 +43,7 @@ export default function ApplicationsPage() {
             // Format date like "Aug 5, 2024"
             const date = new Date(req.createdAt);
             const formattedDate = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            
+
             // Format status like "PENDING" -> "Pending"
             const statusStr = req.status || "PENDING";
             const formattedStatus = statusStr.charAt(0).toUpperCase() + statusStr.slice(1).toLowerCase();
@@ -78,10 +51,10 @@ export default function ApplicationsPage() {
             // Format category (cuisine) to handle multiple types: ["MEDITERRANEAN", "ITALIAN", "CHINESE"] -> "Mediterranean, Italian, +1 More"
             let formattedCategory = "Other";
             if (Array.isArray(req.cuisineTypes) && req.cuisineTypes.length > 0) {
-              const firstTwo = req.cuisineTypes.slice(0, 2).map((cuisine: string) => 
+              const firstTwo = req.cuisineTypes.slice(0, 2).map((cuisine: string) =>
                 cuisine.charAt(0).toUpperCase() + cuisine.slice(1).toLowerCase()
               );
-              
+
               if (req.cuisineTypes.length > 2) {
                 const remainingCount = req.cuisineTypes.length - 2;
                 formattedCategory = `${firstTwo.join(", ")}, +${remainingCount} More`;
@@ -100,10 +73,7 @@ export default function ApplicationsPage() {
             };
           });
         }
-        
-        // Append Mock Data
-        formattedData = [...formattedData, ...MOCK_APPLICATIONS];
-        
+
         setApplications(formattedData);
       } finally {
         setIsLoading(false);
@@ -111,7 +81,7 @@ export default function ApplicationsPage() {
     }
     fetchData();
   }, []);
-  
+
   const totalPages = Math.ceil(applications.length / itemsPerPage);
   const currentApplications = applications.slice(
     (currentPage - 1) * itemsPerPage,
@@ -120,14 +90,7 @@ export default function ApplicationsPage() {
 
   const handleApprove = async (id: number | string) => {
     const toastId = toast.loading("Approving application...");
-    if (String(id).startsWith('m')) {
-      setTimeout(() => {
-        toast.success("Application approved!", { id: toastId });
-        setApplications(apps => apps.map(app => app.id === id ? { ...app, status: "Approved" } : app));
-      }, 500);
-      return;
-    }
-    
+
     const result = await reviewSellerRequest(id.toString(), "APPROVED", "N/A");
     if (result.success) {
       toast.success(result.message || "Application approved!", { id: toastId });
@@ -153,14 +116,6 @@ export default function ApplicationsPage() {
     const toastId = toast.loading("Rejecting application...");
     setRejectModalOpen(false);
 
-    if (String(selectedAppIdToReject).startsWith('m')) {
-      setTimeout(() => {
-        toast.success("Application rejected!", { id: toastId });
-        setApplications(apps => apps.map(app => app.id === selectedAppIdToReject ? { ...app, status: "Rejected" } : app));
-      }, 500);
-      return;
-    }
-
     const result = await reviewSellerRequest(selectedAppIdToReject.toString(), "REJECTED", rejectReason);
     if (result.success) {
       toast.success(result.message || "Application rejected!", { id: toastId });
@@ -177,34 +132,34 @@ export default function ApplicationsPage() {
   return (
     <div className="flex flex-1 flex-col gap-6">
       <MotionWrapper delay={0.1}>
-        <PageHeader 
-          title="Sellers Application" 
-          description="Review & approve new seller request" 
+        <PageHeader
+          title="Sellers Application"
+          description="Review & approve new seller request"
         />
       </MotionWrapper>
 
       <MotionWrapper delay={0.2}>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {currentApplications.map(app => (
-          <ApplicationCard 
-            key={app.id} 
-            application={app} 
-            onApprove={handleApprove}
-            onReject={handleRejectClick}
-          />
-        ))}
-        {applications.length === 0 && (
-          <div className="col-span-full py-16 flex flex-col items-center justify-center text-center bg-card border border-border rounded-2xl">
-            <h3 className="text-lg font-semibold text-foreground mb-1">No pending applications</h3>
-            <p className="text-muted-foreground text-sm">You have reviewed all seller requests.</p>
-          </div>
-        )}
+            <ApplicationCard
+              key={app.id}
+              application={app}
+              onApprove={handleApprove}
+              onReject={handleRejectClick}
+            />
+          ))}
+          {applications.length === 0 && (
+            <div className="col-span-full py-16 flex flex-col items-center justify-center text-center bg-card border border-border rounded-2xl">
+              <h3 className="text-lg font-semibold text-foreground mb-1">No pending applications</h3>
+              <p className="text-muted-foreground text-sm">You have reviewed all seller requests.</p>
+            </div>
+          )}
         </div>
       </MotionWrapper>
 
       {applications.length > 6 && (
         <MotionWrapper delay={0.3}>
-          <CommonPagination 
+          <CommonPagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
@@ -233,16 +188,16 @@ export default function ApplicationsPage() {
             </div>
           </div>
           <DialogFooter className="sm:justify-end gap-2 sm:gap-0 mt-2">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => setRejectModalOpen(false)}
               className="rounded-full font-bold px-6"
             >
               Cancel
             </Button>
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               onClick={confirmReject}
               className="bg-[#EF4444] text-white hover:bg-[#dc2626] rounded-full font-bold px-6"
             >
