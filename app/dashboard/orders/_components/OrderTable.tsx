@@ -17,13 +17,20 @@ interface OrderTableProps {
 export function OrderTable({ orders, onViewOrder }: OrderTableProps) {
   const getStatusBadgeStyles = (status: string) => {
     switch (status) {
-      case "Completed":
-        return "bg-[#e8f3ec] text-[#3A8F5C] hover:bg-[#e8f3ec]";
-      case "Delivered":
-        return "bg-blue-100 text-blue-700 hover:bg-blue-100";
+      case "Pending Payment":
       case "Preparing":
         return "bg-[#fff0e5] text-[#F59E0B] hover:bg-[#fff0e5]";
+      case "Confirmed":
+        return "bg-blue-100 text-blue-700 hover:bg-blue-100";
+      case "Accepted":
+        return "bg-teal-100 text-teal-700 hover:bg-teal-100";
+      case "Out For Delivery":
+        return "bg-purple-100 text-purple-700 hover:bg-purple-100";
+      case "Delivered":
+      case "Completed":
+        return "bg-[#e8f3ec] text-[#3A8F5C] hover:bg-[#e8f3ec]";
       case "Cancelled":
+      case "Failed":
         return "bg-[#ffe5e5] text-[#EF4444] hover:bg-[#ffe5e5]";
       default:
         return "bg-muted text-muted-foreground";
