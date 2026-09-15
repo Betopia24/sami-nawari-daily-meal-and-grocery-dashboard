@@ -9,12 +9,12 @@ import { FoodDetailsSheet } from "./FoodDetailsSheet";
 
 interface FoodTableProps {
   foods: Food[];
-  onAction: (id: number, actionType: string) => void;
+  onAction: (id: string, actionType: string) => void;
 }
 
 export function FoodTable({ foods, onAction }: FoodTableProps) {
   type ActionType = 'hide' | 'unhide' | 'approve' | 'reject' | 'remove';
-  const [dialogState, setDialogState] = useState<{ id: number; type: ActionType } | null>(null);
+  const [dialogState, setDialogState] = useState<{ id: string; type: ActionType } | null>(null);
   const [foodToView, setFoodToView] = useState<Food | null>(null);
 
   const getStatusBadgeStyles = (status: string) => {
@@ -49,9 +49,13 @@ export function FoodTable({ foods, onAction }: FoodTableProps) {
             <TableRow key={food.id} className="border-border hover:bg-muted/30 animate-in fade-in slide-in-from-bottom-2 duration-300">
               <TableCell className="px-6 py-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-lg border border-border bg-muted/30">
-                    <Utensils className="w-5 h-5 text-muted-foreground/60" />
-                  </div>
+                  {food.images && food.images.length > 0 ? (
+                    <img src={food.images[0]} alt={food.name} className="w-10 h-10 rounded-lg object-cover border border-border" />
+                  ) : (
+                    <div className="flex items-center justify-center w-10 h-10 rounded-lg border border-border bg-muted/30 shrink-0">
+                      <Utensils className="w-5 h-5 text-muted-foreground/60" />
+                    </div>
+                  )}
                   <span className="font-semibold text-foreground text-sm">{food.name}</span>
                 </div>
               </TableCell>

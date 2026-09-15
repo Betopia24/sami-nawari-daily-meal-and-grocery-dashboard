@@ -7,58 +7,132 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CommonPagination } from "@/components/common/CommonPagination";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MotionWrapper } from "@/components/common/MotionWrapper";
+import { toast } from "sonner";
+import { TableSkeleton } from "@/components/common/TableSkeleton";
+import { PaginationSkeleton } from "@/components/common/PaginationSkeleton";
 
 import { Food } from "./types";
 import { FoodTable } from "./_components/FoodTable";
-
-const mockFoods: Food[] = [
-  { id: 1, name: "Chicken Biryani", seller: "Maria's Kitchen", category: "Indian", price: "$14.99", status: "Published" },
-  { id: 2, name: "Beef Tacos", seller: "Maria's Kitchen", category: "Mexican", price: "$11.99", status: "Published" },
-  { id: 3, name: "Greek Salad", seller: "Green Bowl by Aiko", category: "Mediterranean", price: "$9.99", status: "Pending" },
-  { id: 4, name: "Sourdough Loaf", seller: "Mama Rose Bakes", category: "Bakery", price: "$8.99", status: "Published" },
-  { id: 5, name: "Spicy Curry", seller: "Raj's Spice House", category: "Indian", price: "$13.99", status: "Pending" },
-  { id: 6, name: "Pad Thai", seller: "Green Bowl by Aiko", category: "Thai", price: "$12.99", status: "Hidden" },
-];
+import { getAdminFoods, reviewFoodListing, toggleFoodVisibility, deleteFoodListing } from "@/app/actions/foods";
 
 export default function FoodsPage() {
-  const [foods, setFoods] = useState<Food[]>(mockFoods);
+  const [foods, setFoods] = useState<Food[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch] = useDebounce(searchTerm, 300);
   const [activeTab, setActiveTab] = useState("All");
+  const [isLoading, setIsLoading] = useState(true);
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const FOODS_PER_PAGE = 5;
-
-  const filteredFoods = foods.filter(food => {
-    const matchesSearch = 
-      food.name.toLowerCase().includes(debouncedSearch.toLowerCase()) || 
-      food.seller.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-      food.category.toLowerCase().includes(debouncedSearch.toLowerCase());
-    const matchesTab = activeTab === "All" || food.status === activeTab;
-    return matchesSearch && matchesTab;
-  });
 
   // Reset to first page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearch, activeTab]);
 
-  const totalPages = Math.ceil(filteredFoods.length / FOODS_PER_PAGE);
-  const paginatedFoods = filteredFoods.slice((currentPage - 1) * FOODS_PER_PAGE, currentPage * FOODS_PER_PAGE);
+  const fetchFoods = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getAdminFoods({
+        searchTerm: debouncedSearch,
+        status: activeTab === "All" ? undefined : activeTab.toUpperCase(),
+        page: currentPage,
+        limit: FOODS_PER_PAGE,
+      });
 
-  const handleAction = (id: number, actionType: string) => {
-    setFoods(currentFoods => currentFoods.map(food => {
-      if (food.id === id) {
-        if (actionType === 'hide') return { ...food, status: "Hidden" };
-        if (actionType === 'unhide') return { ...food, status: "Published" };
-        if (actionType === 'approve') return { ...food, status: "Published" };
-        if (actionType === 'reject') return { ...food, status: "Hidden" }; // Or you could remove it
+      if (response && response.success) {
+        const formattedData: Food[] = response.data.data.map((item: any) => {
+          let parsedIngredients = item.ingredients;
+          if (typeof item.ingredients === 'string') {
+            try {
+              parsedIngredients = JSON.parse(item.ingredients);
+            } catch (e) {
+              parsedIngredients = [];
+            }
+          }
+
+          return {
+            id: item.id,
+            name: item.name,
+            seller: item.seller?.sellerProfile?.businessName || item.seller?.name || "Unknown Seller",
+            sellerEmail: item.seller?.email,
+            sellerProfilePicture: item.seller?.profilePicture,
+            sellerCuisineTypes: item.seller?.sellerProfile?.cuisineTypes,
+            category: item.category || "Unknown",
+            subcategory: item.subcategory,
+            price: `$${item.price}`,
+            status: item.status ? item.status.charAt(0).toUpperCase() + item.status.slice(1).toLowerCase() : "Pending",
+            description: item.description,
+            images: item.images,
+            preparationTime: item.preparationTime,
+            ingredients: parsedIngredients,
+            pickupAvailable: item.pickupAvailable,
+            deliveryAvailable: item.deliveryAvailable,
+            deliveryFee: item.deliveryFee,
+            createdAt: item.createdAt,
+          };
+        });
+        setFoods(formattedData);
+        setTotalPages(response.data.meta.totalPage || 1);
+      } else {
+        toast.error(response?.message || "Failed to fetch foods");
+        setFoods([]);
       }
-      return food;
-    }).filter(food => {
-      if (food.id === id && actionType === 'remove') return false;
-      return true;
-    }));
+    } catch (error) {
+      toast.error("An error occurred while fetching foods");
+      setFoods([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchFoods();
+  }, [debouncedSearch, activeTab, currentPage]);
+
+  const handleAction = async (id: string, actionType: string) => {
+    let targetStatus = "PENDING";
+    let isVisibilityAction = false;
+    let isRemoveAction = false;
+    
+    if (actionType === 'hide') { targetStatus = "HIDDEN"; isVisibilityAction = true; }
+    else if (actionType === 'unhide') { targetStatus = "PUBLISHED"; isVisibilityAction = true; }
+    else if (actionType === 'approve') targetStatus = "PUBLISHED";
+    else if (actionType === 'reject') targetStatus = "REJECTED";
+    else if (actionType === 'remove') { targetStatus = "DELETED"; isRemoveAction = true; }
+
+    const toastId = toast.loading(`Processing action "${actionType}"...`);
+
+    try {
+      let result;
+      if (isVisibilityAction) {
+        result = await toggleFoodVisibility(id, targetStatus as "PUBLISHED" | "HIDDEN");
+      } else if (isRemoveAction) {
+        result = await deleteFoodListing(id);
+      } else {
+        result = await reviewFoodListing(id, targetStatus);
+      }
+      
+      if (result && result.success) {
+        toast.success(result.message || `Food status updated successfully.`, { id: toastId });
+        
+        setFoods(currentFoods => currentFoods.map(food => {
+          if (food.id === id) {
+            // Optimistic mapping back to Title Case if we didn't remove it
+            return { ...food, status: targetStatus === "HIDDEN" ? "Hidden" : targetStatus === "PUBLISHED" ? "Published" : targetStatus === "REJECTED" ? "Rejected" : "Pending" };
+          }
+          return food;
+        }).filter(food => {
+          if (food.id === id && actionType === 'remove') return false;
+          return true;
+        }));
+      } else {
+        toast.error(result?.message || `Failed to update food status`, { id: toastId });
+      }
+    } catch (error) {
+      toast.error("An error occurred while updating the food listing", { id: toastId });
+    }
   };
 
   return (
@@ -96,19 +170,29 @@ export default function FoodsPage() {
       </MotionWrapper>
 
       <MotionWrapper delay={0.3}>
-        <FoodTable 
-          foods={paginatedFoods}
-          onAction={handleAction}
-        />
+        {isLoading ? (
+          <TableSkeleton />
+        ) : (
+          <FoodTable 
+            foods={foods}
+            onAction={handleAction}
+          />
+        )}
       </MotionWrapper>
 
-      <MotionWrapper delay={0.4}>
-        <CommonPagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
-        />
-      </MotionWrapper>
+      {isLoading ? (
+        <MotionWrapper delay={0.4}>
+          <PaginationSkeleton />
+        </MotionWrapper>
+      ) : totalPages > 1 ? (
+        <MotionWrapper delay={0.4}>
+          <CommonPagination 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={setCurrentPage} 
+          />
+        </MotionWrapper>
+      ) : null}
     </div>
   );
 }
